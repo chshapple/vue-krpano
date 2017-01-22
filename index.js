@@ -68,6 +68,8 @@ module.exports = {
                     mwheel: this.mwheel,
                     onready(){
                         vm.krpanoObj = vm.$el.firstChild;
+                        vm.$emit("panoCreated", krpanoObj);
+
                         vm.lock = false;
 
                         if (vm.noPlugin) {
@@ -75,7 +77,6 @@ module.exports = {
                         }
 
                         if (vm.debug) console.log("pano created");
-
                     }
                 });
             }
