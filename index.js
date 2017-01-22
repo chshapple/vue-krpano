@@ -68,7 +68,7 @@ module.exports = {
                     mwheel: this.mwheel,
                     onready(){
                         vm.krpanoObj = vm.$el.firstChild;
-                        vm.$emit("panoCreated", krpanoObj);
+                        vm.$emit("panoCreated", vm.krpanoObj);
 
                         vm.lock = false;
 
