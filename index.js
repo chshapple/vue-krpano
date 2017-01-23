@@ -69,24 +69,33 @@ module.exports = {
                     onready(){
                         vm.krpanoObj = vm.$el.firstChild;
                         vm.$emit("panoCreated", vm.krpanoObj);
-
                         vm.lock = false;
 
-                        if (vm.noPlugin) {
-                            vm.krpanoObj.call("for(set(i,0), i LT plugin.count, inc(i), set(plugin[get(i)].visible,false))");
-                        }
+                        vm.applyConfig();
 
-                        if (vm.debug) console.log("pano created");
+                        if (vm.debug) console.debug("pano created");
                     }
                 });
             }
 
         },
+        changeScene(newScene){
+            if (this.krpanoObj) {
+                this.krpanoObj.call(`loadscene(get(scene[${newScene - 1}].name),null,MERGE,BLEND(0.5))`);
+            }
+        },
+        applyConfig(){
+            if (this.noPlugin) {
+                this.krpanoObj.call("for(set(i,0), i LT plugin.count, inc(i), set(plugin[get(i)].visible,false))");
+            }
+
+            this.changeScene(this.scene);
+        },
         destroyPano(){
             if (this.krpanoObj) {
                 window.removepano(this.krpanoObj.id);
                 delete this.krpanoObj;
-                if (this.debug) console.log("pano destroyed");
+                if (this.debug) console.debug("pano destroyed");
             }
         },
         scrollListener(){
@@ -96,30 +105,37 @@ module.exports = {
                 //屏幕之外
                 if (this.krpanoObj) {
                     this.krpanoObj.call("if(autorotate.enabled,autorotate.pause())");
+                    if (this.debug) console.debug("out of screen: autorotate paused");
                 }
 
             } else {
                 //屏幕之内
                 if (!this.krpanoObj) {
-                    this.createPano()
+                    this.createPano();
+                    if (this.debug) console.debug("in screen: pano created");
+
                 }
                 else {
                     this.krpanoObj.call("if(autorotate.enabled,autorotate.resume())");
+                    if (this.debug) console.debug("in screen: autorotate resumed");
+
                 }
             }
         }
     },
     watch: {
         xml: function (newXml) {
+
+            if (this.debug) console.debug("newXml: " + newXml);
             if (this.krpanoObj) {
-                this.krpanoObj.call(`loadpano(${newXml})`);
-                this.krpanoObj.call(`loadscene(get(scene[${this.scene - 1}].name),null,MERGE,BLEND(0.5))`);
+                this.krpanoObj.call(`loadpano(${newXml},null,IGNOREKEEP)`);
+                this.applyConfig();
             }
+
         },
         scene: function (newScene) {
-            if (this.krpanoObj) {
-                this.krpanoObj.call(`loadscene(get(scene[${newScene - 1}].name),null,MERGE,BLEND(0.5))`);
-            }
+            if (this.debug) console.debug("newScene: " + newScene);
+            this.changeScene(newScene);
         }
     },
     destroyed(){
