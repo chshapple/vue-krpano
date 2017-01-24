@@ -73,7 +73,7 @@ module.exports = {
 
                         vm.applyConfig();
 
-                        if (vm.debug) console.debug("pano created");
+                        if (vm.debug) console.debug("[" + vm.krpanoObjId + "] pano created");
                     }
                 });
             }
@@ -100,24 +100,23 @@ module.exports = {
         },
         scrollListener(){
 
-            if (window.scrollY - this.$el.offsetTop - this.$el.offsetHeight > 0 ||
-                this.$el.offsetTop - window.scrollY - window.innerHeight > 0) {
+            var rect = this.$el.getBoundingClientRect();
+
+            if (-rect.top > rect.height || rect.top > window.innerHeight) {
                 //屏幕之外
                 if (this.krpanoObj) {
                     this.krpanoObj.call("if(autorotate.enabled,autorotate.pause())");
-                    if (this.debug) console.debug("out of screen: autorotate paused");
+                    if (this.debug) console.debug("[" + this.krpanoObjId + "] out of screen: autorotate paused");
                 }
 
             } else {
                 //屏幕之内
                 if (!this.krpanoObj) {
                     this.createPano();
-                    if (this.debug) console.debug("in screen: pano created");
-
                 }
                 else {
                     this.krpanoObj.call("if(autorotate.enabled,autorotate.resume())");
-                    if (this.debug) console.debug("in screen: autorotate resumed");
+                    if (this.debug) console.debug("[" + this.krpanoObjId + "] in screen: autorotate resumed");
 
                 }
             }
