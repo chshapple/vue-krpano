@@ -14,8 +14,7 @@ module.exports = {
             required: true
         },
         scene: {
-            type: Number,
-            default: 1
+            type: String
         },
         lazyLoad: {
             type: Boolean,
@@ -70,33 +69,20 @@ module.exports = {
                         vm.krpanoObj = vm.$el.firstChild;
                         vm.$emit("panoCreated", vm.krpanoObj);
                         vm.lock = false;
-
+                        vm.loadScene(vm.scene);
                         vm.applyConfig();
-
-                        if (vm.debug) console.debug("[" + vm.krpanoObjId + "] pano created");
+                        vm.debug && console.debug("[" + vm.krpanoObjId + "] pano created");
                     }
                 });
             }
 
         },
-        changeScene(newScene){
-            if (this.krpanoObj) {
-                this.krpanoObj.call(`loadscene(get(scene[${newScene - 1}].name),null,MERGE,BLEND(0.5))`);
-            }
-        },
-        applyConfig(){
-            if (this.noPlugin) {
-                this.krpanoObj.call("for(set(i,0), i LT plugin.count, inc(i), set(plugin[get(i)].visible,false))");
-            }
+        loadScene(newScene){
+            let str = `if(scene[${newScene}]===null,
+            loadscene(get(scene[0].name),null,MERGE,BLEND(0.5)),
+            loadscene(${newScene},null,MERGE,BLEND(0.5)))`;
 
-            this.changeScene(this.scene);
-        },
-        destroyPano(){
-            if (this.krpanoObj) {
-                window.removepano(this.krpanoObj.id);
-                delete this.krpanoObj;
-                if (this.debug) console.debug("pano destroyed");
-            }
+            this.krpanoObj && this.krpanoObj.call(str);
         },
         scrollListener(){
 
@@ -106,41 +92,51 @@ module.exports = {
                 //屏幕之外
                 if (this.krpanoObj) {
                     this.krpanoObj.call("if(autorotate.enabled,autorotate.pause())");
-                    if (this.debug) console.debug("[" + this.krpanoObjId + "] out of screen: autorotate paused");
+                    this.debug && console.debug("[" + this.krpanoObjId + "] out of screen: autorotate paused");
                 }
 
             } else {
                 //屏幕之内
                 if (!this.krpanoObj) {
+                    //lazy load
                     this.createPano();
                 }
                 else {
                     this.krpanoObj.call("if(autorotate.enabled,autorotate.resume())");
-                    if (this.debug) console.debug("[" + this.krpanoObjId + "] in screen: autorotate resumed");
-
+                    this.debug && console.debug("[" + this.krpanoObjId + "] in screen: autorotate resumed");
                 }
+            }
+        },
+        applyConfig(){
+            //apply settings
+            if (this.noPlugin) {
+                this.krpanoObj.call("for(set(i,0), i LT plugin.count, inc(i), set(plugin[get(i)].visible,false))");
             }
         }
     },
     watch: {
         xml: function (newXml) {
 
-            if (this.debug) console.debug("newXml: " + newXml);
+            this.debug && console.debug("newXml: " + newXml);
             if (this.krpanoObj) {
                 this.krpanoObj.call(`loadpano(${newXml},null,IGNOREKEEP)`);
                 this.applyConfig();
+                this.loadScene(this.scene);
             }
-
         },
         scene: function (newScene) {
-            if (this.debug) console.debug("newScene: " + newScene);
-            this.changeScene(newScene);
+            this.debug && console.debug("newScene: " + newScene);
+            this.loadScene(newScene);
         }
     },
-    destroyed(){
+    beforeDestroy(){
         if (this.lazyLoad) {
             window.removeEventListener("scroll", this.scrollListener);
         }
-        this.destroyPano();
+        if (this.krpanoObj) {
+            window.removepano(this.krpanoObj.id);
+            delete this.krpanoObj;
+            this.debug && console.debug("pano destroyed");
+        }
     }
 };
