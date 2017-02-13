@@ -1,8 +1,8 @@
 {
   "name": "vue-krpano",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
-  "main": "index.js",
+  "main": "index.min.js",
   "scripts": {
     "build": "babel index.js --out-file index.min.js"
   },
