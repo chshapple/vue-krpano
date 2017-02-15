@@ -39,6 +39,9 @@ module.exports = {
         debug: {
             type: Boolean,
             default: false
+        },
+        callback: {
+            type: Object
         }
     },
     template: "<div class='vue-krpano'></div>",
@@ -67,6 +70,7 @@ module.exports = {
                     mwheel: this.mwheel,
                     onready(){
                         vm.krpanoObj = vm.$el.firstChild;
+
                         vm.$emit("panoCreated", vm.krpanoObj);
                         vm.lock = false;
                         vm.loadScene(vm.scene);
@@ -111,6 +115,10 @@ module.exports = {
             //apply settings
             if (this.noPlugin) {
                 this.krpanoObj.call("for(set(i,0), i LT plugin.count, inc(i), set(plugin[get(i)].visible,false))");
+            }
+
+            if (this.callback) {
+                Object.assign(this.krpanoObj, this.callback);
             }
         }
     },
