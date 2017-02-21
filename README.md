@@ -44,7 +44,32 @@ page.html
 |`focus`|A Boolean setting to give the viewer the input / keyboard focus on startup.|`true`|
 |`consolelog`|A Boolean setting that defines if krpano log/trace-messages should be sent also to the browser Javascript console.|`false`|
 |`noPlugin`|A Boolean setting to remove all plugins|`false`|
+|`callback`|An object that will be attached to the `krpano` instance|`{foo:bar}`|
 |`debug`|Debug mode|`false`|
+
+
+## Two-way Communication
+
+The `callback` object will be attached to the `krpano` instance.
+
+Example:
+
+```js
+var callback = {
+    doSomething(){
+        //do something
+    }
+}
+```
+
+In krpano scripts, you can access the callback object via [krpano](https://krpano.com/docu/actions/#jscall
+) instance.
+
+```xml
+<action name="my_action">
+    jscall(calc('krpano.doSomething()'));
+</action>
+```
 
 ## About
 

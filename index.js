@@ -68,6 +68,8 @@ module.exports = {
                     target: this.$el.id,
                     xml: this.xml,
                     mwheel: this.mwheel,
+                    focus: this.focus,
+                    consolelog: this.consolelog,
                     onready(){
                         vm.krpanoObj = vm.$el.firstChild;
 
