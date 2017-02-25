@@ -2,6 +2,10 @@
 
 A Vue component for [krpano](http://www.krpano.com) player.
 
+## Demo
+
+[http://yier.ehousechina.com/pois/10045](http://yier.ehousechina.com/pois/10045)
+
 ## Installation
 
 ```
