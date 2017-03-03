@@ -44,6 +44,7 @@ page.html
 |`xml`|Krpano configuration XML path|`krpano.xml`|
 |`scene`|Scene name|`foo`|
 |`lazyLoad`|A Boolean setting to lazy load pano objects|`true`|
+|`freezeVertical`|A Boolean setting to freeze scrolling vertically|`false`|
 |`hooks`|An object that will be attached to the `krpano` instance|`{foo:bar}`|
 |`debug`|Debug mode|`false`|
 

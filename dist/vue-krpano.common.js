@@ -30,7 +30,11 @@ if(!this.krpanoObj){this.createLock=false;//lazy load
 this.createPano();}else{this.krpanoObj.call("if(autorotate.enabled,autorotate.resume())");this.log("in screen: autorotate resumed");}}}}};
 
 /**
+ * Created by chenshu on 03/03/2017.
+ */function touchstart(e){var touch=e.changedTouches[0];this.touchOrigin={x:touch.clientX,y:touch.clientY};}function touchmove(e){e.stopPropagation();var touch=e.changedTouches[0];var current={x:touch.clientX,y:touch.clientY};var deltaX=this.touchOrigin.x-current.x;var deltaY=this.touchOrigin.y-current.y;window.scrollBy(0,deltaY);var vlookat=this.get("view.vlookat");var hlookat=this.get("view.hlookat")+deltaX;this.call("lookat("+hlookat+","+vlookat+")");this.touchOrigin=current;}var config$4={props:{freezeVertical:{type:Boolean,default:false}},methods:{setVerticalFreeze:function setVerticalFreeze(freeze){if(freeze){this.krpanoObj.addEventListener("touchstart",touchstart,true);this.krpanoObj.addEventListener("touchmove",touchmove,true);this.log("vertical freeze");}else{this.krpanoObj.removeEventListener("touchstart",touchstart,true);this.krpanoObj.removeEventListener("touchmove",touchmove,true);this.log("vertical release");}}},watch:{freezeVertical:function freezeVertical(val){this.setVerticalFreeze(val);}},created:function created(){var _this=this;this.$on("panoCreated",function(){_this.setVerticalFreeze(_this.freezeVertical);});}};
+
+/**
  * Created by chenshu on 02/03/2017.
- */var config={mixins:[config$2,config$3],template:"<div class='vue-krpano'></div>",mounted:function mounted(){this.createPano();}};
+ */var config={mixins:[config$2,config$3,config$4],template:"<div class='vue-krpano'></div>",mounted:function mounted(){this.createPano();}};
 
 module.exports = config;
