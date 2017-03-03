@@ -1,10 +1,10 @@
 {
   "name": "vue-krpano",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "",
-  "main": "index.min.js",
+  "main": "dist/vue-krpano.common.js",
   "scripts": {
-    "build": "babel index.js --out-file index.min.js"
+    "build": "node build/"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,10 @@
   "homepage": "https://github.com/chshapple/vue-krpano#readme",
   "devDependencies": {
     "babel-cli": "^6.22.2",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-3": "^6.22.0"
-  },
-  "dependencies": {
-    "vue": "^2.1.10"
+    "babel-preset-stage-3": "^6.22.0",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "^2.7.1"
   }
 }
