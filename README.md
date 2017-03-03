@@ -53,7 +53,7 @@ page.html
 |:--|:--|:--|
 |`bgcolor`|The background color of the viewer (in html color format).|`#000000`|
 |`wmode`|The wmode setting is typically a Flashplayer setting, but wmode=opaque and wmode=transparent<br/> will be evaluated also by the krpano HTML5 viewer and make the viewer background transparent there too. <br/>Overlapping html elements itself are always possible when using the HTML5 viewer.|`opaque`|
-|`vars`|Pass a Javascript Object with krpano variable:value pairs.<br/>The variables will be set AFTER the xml file has been be loaded and parsed.
+|`vars`|Pass a Javascript Object with krpano variable:value pairs.<br/>The variables will be set AFTER the xml file has been be loaded and parsed.<br/>
 So these variables can be used to add new settings or to overwrite settings that were already defined in the xml.||
 |`initvars`|Pass a Javascript Object with krpano variable:value pairs.<br/>This is basically the same as the vars setting, <br/>but these variables will be set BEFORE the xml file wil be loaded and parsed.||
 |`basepath`|Can be used in Flash and HTML5 for adjusting relative paths in the xml.||
