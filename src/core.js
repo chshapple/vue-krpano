@@ -81,14 +81,10 @@ let config = {
         loadScene(){
             let scene = this.scene;
             if (this.krpanoObj) {
-                if (scene) {
-                    let str = `if(scene[${scene}]===null,
+                let str = `if(scene[${scene}]===null,
                         loadscene(get(scene[0].name),null,MERGE,BLEND(0.5)),
                         loadscene(${scene},null,MERGE,BLEND(0.5)))`;
-                    this.krpanoObj.call(str);
-                } else {
-                    this.krpanoObj.call("loadscene(get(scene[0].name),null,MERGE,BLEND(0.5))");
-                }
+                this.krpanoObj.call(str);
 
                 this.log("scene changed: " + scene);
                 this.$emit("sceneChanged", scene);
