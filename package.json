@@ -1,10 +1,10 @@
 {
   "name": "vue-krpano",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "",
   "main": "dist/vue-krpano.common.js",
   "scripts": {
-    "build": "node build/"
+    "build": "node build/index.js"
   },
   "repository": {
     "type": "git",
