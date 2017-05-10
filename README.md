@@ -89,4 +89,4 @@ In krpano scripts, you can access the callback object via [krpano](https://krpan
 
 ## About
 
-For any question, please feel free to write email to 261934121@qq.com
+For any question, please feel free to write email to chshapple@gmail.com
