@@ -18,15 +18,20 @@ npm install vue-krpano --save
 * A Krpano player globally referenced by `<script>`
 
 
-## Instruction
+## Example
 
 page.js
 
 ```js
 {
-    "template": require("./page.html"),
-    "components": {
+    template: require("./page.html"),
+    components: {
         "krpano": require("vue-krpano")
+    },
+    methods: {
+        init(krpanoObj){
+            //you can manipulate the krpanoObj here.
+        }
     }
 }
 ```
@@ -34,7 +39,7 @@ page.js
 page.html
 
 ```html
-<krpano :xml="'krpano.xml'" :lazy-load="true" style="width:100%;height:400px"></krpano>
+<krpano :xml="'krpano.xml'" :lazy-load="true" style="width:100%;height:400px" @panoCreated="init"></krpano>
 ```
 
 ## Props
@@ -63,6 +68,17 @@ page.html
 |`webglsettings`|Pass an object with special settings for the WebGL context creation.<br/>The WebGL context will be created at startup and can't be changed at runtime, therefore these settings need to be specified already during embedding.||
 |`mobilescale`|By default all krpano content on mobile devices will be scaled by 0.5.<br/>To disable that scaling, set the mobilescale setting to 1.0.<br/>This can be useful for implementing responsive webdesigns.|`0.5`|
 |`fakedevice`|Fake the krpano device detection settings.<br/>Available settings: `mobile`, `tablet`, `desktop`.|`mobile`|
+
+## Events
+
+### panoCreated
+
+This event will be fired along with a krpano object as soon as the krpano instance is successfully initialized.
+
+### sceneChanged
+
+This event will be fired every time the scene is changed. The scene name will also be involved.
+
 
 ## Two-way Communication
 
