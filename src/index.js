@@ -7,7 +7,9 @@ import core from "./core";
 import lazyLoad from "./features/lazyLoad";
 import freezeVertical from "./features/freezeVertical";
 
-let config = {
+let component = {
+
+    name: "Krpano",
 
     mixins: [core, lazyLoad, freezeVertical],
 
@@ -18,4 +20,8 @@ let config = {
     }
 };
 
-export default config;
+component.install = function (Vue) {
+    Vue.component(component.name, component);
+};
+
+export default component;
