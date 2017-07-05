@@ -80,7 +80,7 @@ let config = {
         },
         loadScene(){
             let scene = this.scene;
-            if (this.krpanoObj) {
+            if (this.krpanoObj && scene) {
                 let str = `if(scene[${scene}]===null,
                         loadscene(get(scene[0].name),null,MERGE,BLEND(0.5)),
                         loadscene(${scene},null,MERGE,BLEND(0.5)))`;
