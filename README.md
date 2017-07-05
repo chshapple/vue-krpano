@@ -1,10 +1,14 @@
+![Somewhats](http://is2.mzstatic.com/image/thumb/Purple127/v4/36/ec/67/36ec677d-1556-8811-9b02-3b3931657f01/source/175x175bb.jpg)
+
 # vue-krpano
 
 A Vue component for [krpano](http://www.krpano.com) player.
 
 ## Demo
 
-[http://yier.ehousechina.com/pois/10045](http://yier.ehousechina.com/pois/10045)
+[https://www.somewhats.cn/pois/10045](https://www.somewhats.cn/pois/10045)
+
+[https://itunes.apple.com/cn/app/%E5%A3%B9%E4%BA%8C/id1190188895?l=en&mt=8](https://itunes.apple.com/cn/app/%E5%A3%B9%E4%BA%8C/id1190188895?l=en&mt=8)
 
 ## Installation
 
@@ -20,23 +24,19 @@ npm install vue-krpano --save
 
 ## Example
 
-page.js
+Install the component
 
 ```js
-{
-    template: require("./page.html"),
-    components: {
-        "krpano": require("vue-krpano")
-    },
-    methods: {
-        init(krpanoObj){
-            //you can manipulate the krpanoObj here.
-        }
-    }
-}
+
+import Vue from "vue";
+import Krpano from "vue-krpano";
+
+
+Vue.use(Krpano);
+
 ```
 
-page.html
+Use the component
 
 ```html
 <krpano :xml="'krpano.xml'" :lazy-load="true" style="width:100%;height:400px" @panoCreated="init"></krpano>
@@ -86,23 +86,41 @@ The `hooks` object will be attached to the `krpano` instance.
 
 Example:
 
-```js
-var callback = {
-    doSomething(){
-        //do something
+The Vue component wants to capture the event when user click the route spot in pano scenes.
+
+```vue
+<script>
+    export default {
+        data(){
+            const vm = this;
+            return {
+                xml: "xml path",
+                scene: "scene name",
+                hooks:{
+                    sceneChanged(scene){
+                        //event handler
+                    }
+                }                
+            }
+        }
     }
-}
+</script>
+<template>
+    <krpano :xml="xml" :scene="scene" :hooks="hooks"></krpano>
+</template>
 ```
 
 In krpano scripts, you can access the callback object via [krpano](https://krpano.com/docu/actions/#jscall
 ) instance.
 
 ```xml
-<action name="my_action">
-    jscall(calc('krpano.hooks.doSomething()'));
+<events name="player_listener" keep="true" onnewscene="on_scene_loaded()"/>
+<action name="on_scene_loaded">
+    jscall(calc('krpano.hooks.sceneChanged("' + scene[get(xml.scene)].name + '")'));
 </action>
 ```
 
 ## About
 
 For any question, please feel free to write email to chshapple@gmail.com
+
