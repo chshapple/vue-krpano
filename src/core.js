@@ -27,14 +27,14 @@ let config = {
         },
         ...krpanoProps
     },
-    data(){
+    data() {
         return {
             createLock: false,
             krpanoObjId: "krpano_" + Math.floor(Math.random() * (100000 - 100 + 1) + 100)
         };
     },
     methods: {
-        createPano(){
+        createPano() {
 
             if (!this.createLock && !this.krpanoObj) {
                 this.createLock = true;
@@ -57,40 +57,44 @@ let config = {
                     fakedevice: this.fakedevice,
                     passQueryParameters: this.passQueryParameters,
                     webglsettings: this.webglsettings,
-                    onready(krpanoObj){
+                    onready(krpanoObj) {
                         vm.krpanoObj = krpanoObj;
                         vm.krpanoObj.hooks = vm.hooks;
                         vm.log("pano created");
                         vm.$emit("panoCreated", vm.krpanoObj);
                         vm.createLock = false;
                     },
-                    onerror(msg){
+                    onerror(msg) {
                         vm.$emit("panoError", msg);
                         vm.createLock = false;
                     }
                 });
             }
         },
-        removePano(){
+        removePano() {
             if (this.krpanoObj) {
                 removepano(this.krpanoObj.id);
                 this.log("pano removed");
                 delete this.krpanoObj;
             }
         },
-        loadScene(){
+        loadScene() {
             let scene = this.scene;
-            if (this.krpanoObj && scene) {
-                let str = `if(scene[${scene}]===null,
+            if (this.krpanoObj) {
+                if (scene) {
+                    let str = `if(scene[${scene}]===null,
                         loadscene(get(scene[0].name),null,MERGE,BLEND(0.5)),
                         loadscene(${scene},null,MERGE,BLEND(0.5)))`;
-                this.krpanoObj.call(str);
+                    this.krpanoObj.call(str);
+                    this.log("scene changed: " + scene);
+                    this.$emit("sceneChanged", scene);
 
-                this.log("scene changed: " + scene);
-                this.$emit("sceneChanged", scene);
+                } else {
+                    this.krpanoObj.call("loadscene(get(scene[0].name),null,MERGE,BLEND(0.5))");
+                }
             }
         },
-        log(content){
+        log(content) {
             if (this.debug) {
                 if (this.krpanoObj) {
                     content = "[" + this.krpanoObj.id + "] " + content;
@@ -100,7 +104,7 @@ let config = {
         }
     },
     watch: {
-        xml(newXml){
+        xml(newXml) {
             if (this.krpanoObj && newXml) {
                 this.krpanoObj.call(`loadpano(${newXml},null,IGNOREKEEP)`);
                 this.$emit("xmlChanged", newXml);
@@ -111,10 +115,10 @@ let config = {
             this.loadScene();
         }
     },
-    created(){
+    created() {
         this.$on(["panoCreated", "xmlChanged"], this.loadScene);
     },
-    beforeDestroy(){
+    beforeDestroy() {
         this.removePano();
     }
 };
