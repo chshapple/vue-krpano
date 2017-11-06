@@ -5,12 +5,6 @@
 
 import krpanoProps from "./krpanoProps";
 
-const {embedpano, removepano} = window;
-
-if (embedpano == undefined || removepano == undefined) {
-    throw new Error("krpano player is required");
-}
-
 let config = {
     props: {
         xml: {
@@ -35,6 +29,11 @@ let config = {
     },
     methods: {
         createPano() {
+            const {embedpano, removepano} = window;
+
+            if (!(embedpano && removepano)) {
+                throw new Error("krpano player is required");
+            }
 
             if (!this.createLock && !this.krpanoObj) {
                 this.createLock = true;
@@ -72,6 +71,8 @@ let config = {
             }
         },
         removePano() {
+            const {removepano} = window;
+
             if (this.krpanoObj) {
                 removepano(this.krpanoObj.id);
                 this.log("pano removed");
